@@ -26,6 +26,12 @@ action :before_compile do
 
   include_recipe 'python'
 
+  directory "#{new_resource.application.path}/shared" do
+    owner new_resource.owner
+    group new_resource.group
+    action :create
+  end
+
   new_resource.migration_command "#{::File.join(new_resource.virtualenv, "bin", "python")} manage.py syncdb --noinput" if !new_resource.migration_command
 
   new_resource.symlink_before_migrate.update({
